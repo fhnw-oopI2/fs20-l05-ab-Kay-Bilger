@@ -62,7 +62,7 @@ public final class TransactionList {
 	public List<Trader> traders(String city) {
         return allTransactions
         		.stream()
-        		.filter(t -> t.getTrader().getCity().equalsIgnoreCase(city))
+        		.filter(t -> t.getTrader().getCity().equals(city))
         		.map(t -> t.getTrader())
         		.sorted(Comparator.comparing(t -> t.toString().startsWith("A")))
         		.collect(Collectors.toList());
@@ -90,11 +90,10 @@ public final class TransactionList {
 	 */
 	public void relocateTraders(String from, String to) {
 		allTransactions.stream()
-		.forEach(t-> {
-			if (t.getTrader().getCity().equals(from)) {
-				t.getTrader().setCity(to);
-			}	
-		});
+		.filter(t -> t.getTrader().getCity().equalsIgnoreCase(from))
+		.map(t -> t.getTrader())
+		.distinct()
+		.forEach(t -> t.setCity(to));
 	}
 
 	// TODO: AB07
