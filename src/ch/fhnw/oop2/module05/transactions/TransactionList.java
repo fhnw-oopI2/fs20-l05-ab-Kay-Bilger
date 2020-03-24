@@ -62,9 +62,10 @@ public final class TransactionList {
 	public List<Trader> traders(String city) {
         return allTransactions
         		.stream()
-        		.filter(t -> t.getTrader().getCity().equalsIgnoreCase(city))
         		.map(t -> t.getTrader())
-        		.sorted(Comparator.comparing(t -> t.toString().startsWith("A")))
+        		.distinct()
+        		.filter(t -> t.getCity().equalsIgnoreCase(city))
+        		.sorted(Comparator.comparing(t -> t.toString()))
         		.collect(Collectors.toList());
     }
 
@@ -103,6 +104,9 @@ public final class TransactionList {
 	 * @return the highest value in all the transactions
 	 */
 	public int highestValue() {
-        return 0;
+		return allTransactions.stream()
+		.map(t -> t.getValue())
+		.max(Comparator.naturalOrder())
+		.get();
 	}
 }
